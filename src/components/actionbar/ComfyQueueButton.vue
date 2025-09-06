@@ -68,6 +68,17 @@
           }
         "
       />
+      <Button
+        v-tooltip.bottom="{
+          value: 'Screenshot Workflow',
+          showDelay: 600
+        }"
+        icon="pi pi-camera"
+        severity="secondary"
+        text
+        aria-label="Screenshot Workflow"
+        @click="captureScreenshot"
+      />
     </ButtonGroup>
   </div>
 </template>
@@ -86,6 +97,7 @@ import {
   useQueueSettingsStore
 } from '@/stores/queueStore'
 import { useWorkspaceStore } from '@/stores/workspaceStore'
+import { createCanvasScreenshot } from '@/utils/canvasScreenshot'
 
 import BatchCountEdit from './BatchCountEdit.vue'
 
@@ -140,6 +152,17 @@ const queuePrompt = async (e: Event) => {
       ? 'Comfy.QueuePromptFront'
       : 'Comfy.QueuePrompt'
   await commandStore.execute(commandId)
+}
+
+const captureScreenshot = () => {
+  const dataUrl = createCanvasScreenshot(50)
+
+  if (dataUrl) {
+    const link = document.createElement('a')
+    link.download = 'workflow-screenshot.png'
+    link.href = dataUrl
+    link.click()
+  }
 }
 </script>
 
